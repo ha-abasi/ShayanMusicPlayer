@@ -37,6 +37,8 @@ struct ContentView: View {
             .onChange(of: selected){ (old, new) in
                 player.setUrl(urlAddress: selected?.url ?? "")
                 player.play()
+                
+                isPlaying = true
             }
             VStack{
                 Text("\(String(describing: selected?.title ?? "-"))").font(.footnote)
@@ -44,13 +46,14 @@ struct ContentView: View {
             .toolbar{
                 ToolbarItem(placement: .bottomBar){
                     Button{
-                        isPlaying.toggle()
-                        
                         if(isPlaying) {
                             player.pause()
                         }else{
                             player.play()
                         }
+                        isPlaying.toggle()
+                        
+                        
                     }label: {
                         Image(systemName: isPlaying ? "pause" : "play")
                     }
@@ -66,7 +69,7 @@ struct ContentView: View {
 }
 
 #Preview("Sample List") {
-    var config = ModelConfiguration()
+    var config = ModelConfiguration(isStoredInMemoryOnly:true)
     var modelContainer = try! ModelContainer(for:MusicItem.self, configurations: config)
     
     modelContainer.mainContext.insert(MusicItem(title: "Siavash Ghomayshi - Tavahom", url: "https://dl.mehrdl.top/Music/A/Q/New/Siavash%20Ghomayshi%20-%20Tavahom%20(320).mp3"))
