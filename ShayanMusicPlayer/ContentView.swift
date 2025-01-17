@@ -18,7 +18,14 @@ struct ContentView: View {
     var selected : MusicItem?
     
     @State
+    var title: String = ""
+    @State
+    var url: String = ""
+    
+    @State
     var isPlaying : Bool = false
+    @State
+    var appendDialog : Bool = false
     
     var player = MPlayer()
     
@@ -44,6 +51,13 @@ struct ContentView: View {
                 Text("\(String(describing: selected?.title ?? "-"))").font(.footnote)
             }
             .toolbar{
+                ToolbarItem(placement: .topBarTrailing){
+                    Button{
+                        appendDialog = true
+                    }label: {
+                        Image(systemName: "plus")
+                    }
+                }
                 ToolbarItem(placement: .bottomBar){
                     Button{
                         if(isPlaying) {
@@ -65,6 +79,23 @@ struct ContentView: View {
                 Text("No Music Found")
             }
         }
+        .alert("Append", isPresented: $appendDialog){
+            TextField("Title", text: $title)
+            TextField("Url", text: $url)
+            
+            Button{
+                modelContext.insert(MusicItem(title: title, url: url))
+            }label:{
+                Text("Save").tint(.green)
+            }
+            
+            Button{
+                appendDialog = false
+            }label:{
+                Text("Cancel").tint(.yellow)
+            }
+        }
+        
     }
 }
 
