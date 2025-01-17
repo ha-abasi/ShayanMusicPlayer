@@ -35,7 +35,8 @@ struct ContentView: View {
                 }
             }
             .onChange(of: selected){ (old, new) in
-                
+                player.setUrl(urlAddress: selected?.url ?? "")
+                player.play()
             }
             VStack{
                 Text("\(String(describing: selected?.title ?? "-"))").font(.footnote)
@@ -44,6 +45,12 @@ struct ContentView: View {
                 ToolbarItem(placement: .bottomBar){
                     Button{
                         isPlaying.toggle()
+                        
+                        if(isPlaying) {
+                            player.pause()
+                        }else{
+                            player.play()
+                        }
                     }label: {
                         Image(systemName: isPlaying ? "pause" : "play")
                     }
